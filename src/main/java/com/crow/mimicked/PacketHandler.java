@@ -59,16 +59,16 @@ public class PacketHandler {
             PCMStorage storage = entry.getValue();
             it.remove();
 
-            File file = FMLPaths.GAMEDIR.get()
+            File eDir = FMLPaths.GAMEDIR.get()
                     .resolve("mimicked")
                     .resolve(uuid.toString())
                     .toFile();
-            file.mkdirs();
+            eDir.mkdirs();
 
-            File[] files = file.listFiles();
+            File[] files = eDir.listFiles();
             int count = files == null ? 0 : files.length;
 
-            file = file.toPath().resolve(now + ".wav")
+            File file = eDir.toPath().resolve(now + ".wav")
                     .toFile();
 
             if (!Mimicked.valids.contains(uuid))
@@ -76,15 +76,15 @@ public class PacketHandler {
 
             double seconds = storage.getDuration();
 
-            if (
-                    (
-                        count >= Config.MAX_CLIP_STORAGE.get() &&
-                                Math.random() > Config.REPLACEMENT_CHANCE.get()
-                    ) ||
-                    seconds < 1 ||
+            if (seconds < 1 ||
                     isMostlySilent(storage) ||
                     Math.random() < Config.RANDOMNESS.get())
                 continue;
+
+            if (
+                    count >= Config.MAX_CLIP_STORAGE.get() &&
+                            Math.random() > Config.REPLACEMENT_CHANCE.get()
+            ) removeRandomClip(eDir);
 
             saveWav(storage, file);
         }
@@ -107,6 +107,14 @@ public class PacketHandler {
         double ratio = (double) count / audio.length;
 
         return rms < Config.RMS_THRESHOLD.get() || ratio < Config.LOUD_THRESHOLD.get();
+    }
+
+    private static void removeRandomClip(File eDir) {
+        File[] files = eDir.listFiles();
+        if (files == null) return;
+
+        File file = files[(int) (files.length * Math.random())];
+        file.delete();
     }
 
     private static void saveWav(PCMStorage storage, File file) {
