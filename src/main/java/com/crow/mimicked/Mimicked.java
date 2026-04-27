@@ -144,7 +144,7 @@ public class Mimicked
                 player.getX() + radius, player.getY() + radius, player.getZ() + radius
         );
 
-        List<Entity> entities = player.level().getEntities(player, box, e -> !(e instanceof Player) && e instanceof LivingEntity);
+        List<Entity> entities = player.level.getEntities(player, box, e -> !(e instanceof Player) && e instanceof LivingEntity);
 
         if (entities.isEmpty()) return null;
 
