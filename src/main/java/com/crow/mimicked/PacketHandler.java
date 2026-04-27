@@ -85,6 +85,7 @@ public class PacketHandler {
                     count >= Config.MAX_CLIP_STORAGE.get() &&
                             Math.random() > Config.REPLACEMENT_CHANCE.get()
             ) removeRandomClip(eDir);
+            else if (count >= Config.MAX_CLIP_STORAGE.get()) continue;
 
             saveWav(storage, file);
         }
