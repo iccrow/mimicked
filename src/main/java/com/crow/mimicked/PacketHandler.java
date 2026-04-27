@@ -76,7 +76,11 @@ public class PacketHandler {
 
             double seconds = storage.getDuration();
 
-            if (count >= Config.MAX_CLIP_STORAGE.get() ||
+            if (
+                    (
+                        count >= Config.MAX_CLIP_STORAGE.get() &&
+                                Math.random() > Config.REPLACEMENT_CHANCE.get()
+                    ) ||
                     seconds < 1 ||
                     isMostlySilent(storage) ||
                     Math.random() < Config.RANDOMNESS.get())
