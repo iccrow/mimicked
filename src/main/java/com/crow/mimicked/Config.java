@@ -38,7 +38,7 @@ public class Config
 
     public static final ForgeConfigSpec.DoubleValue REPLACEMENT_CHANCE = BUILDER
             .comment("The chance of a clip being replaced by a new one if clip storage is full.")
-            .defineInRange("randomness", 0.2, 0.0, 1.0);
+            .defineInRange("replacementChance", 0.2, 0.0, 1.0);
 
     public static final ForgeConfigSpec.DoubleValue RANDOMNESS = BUILDER
             .comment("The portion of the time to NOT record players' speaking.")
