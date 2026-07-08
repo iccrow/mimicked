@@ -1,4 +1,4 @@
-package com.crow.mimicked;
+package com.crow.mimicked.common;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
