@@ -1,6 +1,8 @@
 package com.crow.mimicked;
 
 import com.crow.mimicked.common.PCMStorage;
+import com.crow.mimicked.common.audio.AudioFileManager;
+import com.crow.mimicked.common.audio.SelectionFilters;
 import de.maxhenkel.voicechat.api.events.ClientReceiveSoundEvent;
 import de.maxhenkel.voicechat.api.events.ClientSoundEvent;
 import net.minecraft.client.Minecraft;
@@ -12,9 +14,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 import javax.sound.sampled.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -78,69 +78,17 @@ public class PacketHandler {
             double seconds = storage.getDuration();
 
             if (seconds < 1 ||
-                    isMostlySilent(storage) ||
+                    SelectionFilters.isMostlySilent(storage) ||
                     Math.random() < Config.RANDOMNESS.get())
                 continue;
 
             if (
                     count >= Config.MAX_CLIP_STORAGE.get() &&
                             Math.random() > Config.REPLACEMENT_CHANCE.get()
-            ) removeRandomClip(eDir);
+            ) AudioFileManager.removeRandomClip(eDir);
             else if (count >= Config.MAX_CLIP_STORAGE.get()) continue;
 
-            saveWav(storage, file);
+            AudioFileManager.saveWav(storage, file);
         }
-    }
-
-    private static boolean isMostlySilent(PCMStorage storage) {
-        short[] audio = storage.getAllSamples();
-        long sum = 0;
-        int count = 0;
-
-        for (short s : audio) {
-            sum += (long) s * s;
-            if (s > Config.AMPLITUDE_THRESHOLD.get())
-                count++;
-        }
-
-        double mean = sum / (double) audio.length;
-        double rms = Math.sqrt(mean);
-
-        double ratio = (double) count / audio.length;
-
-        return rms < Config.RMS_THRESHOLD.get() || ratio < Config.LOUD_THRESHOLD.get();
-    }
-
-    private static void removeRandomClip(File eDir) {
-        File[] files = eDir.listFiles();
-        if (files == null) return;
-
-        File file = files[(int) (files.length * Math.random())];
-        file.delete();
-    }
-
-    private static void saveWav(PCMStorage storage, File file) {
-        try {
-            AudioFormat format = new AudioFormat(
-                    48000,
-                    16,
-                    1,
-                    true,
-                    false
-            );
-
-            byte[] audio = storage.getByteData();
-            storage.clear();
-
-            ByteArrayInputStream bais = new ByteArrayInputStream(audio);
-
-            AudioInputStream ais = new AudioInputStream(
-                    bais,
-                    format,
-                    audio.length / 2
-            );
-
-            AudioSystem.write(ais, AudioFileFormat.Type.WAVE, file);
-        } catch (IOException ignored) {}
     }
 }
