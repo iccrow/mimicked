@@ -1,6 +1,4 @@
-package com.crow.mimicked.common.sfx;
-
-import java.util.Arrays;
+package com.crow.mimicked.common.audio.fx;
 
 public class Shifter {
 

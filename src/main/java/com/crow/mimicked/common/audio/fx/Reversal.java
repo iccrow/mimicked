@@ -1,4 +1,4 @@
-package com.crow.mimicked.common.sfx;
+package com.crow.mimicked.common.audio.fx;
 
 import java.util.Arrays;
 
