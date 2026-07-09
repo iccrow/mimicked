@@ -1,7 +1,6 @@
-package com.crow.mimicked.common.audio;
+package com.crow.mimicked.audio;
 
 import com.crow.mimicked.Config;
-import com.crow.mimicked.common.PCMStorage;
 
 public class SelectionFilters {
 

@@ -1,4 +1,4 @@
-package com.crow.mimicked.common.audio;
+package com.crow.mimicked.audio;
 
 public class AudioConverter {
 

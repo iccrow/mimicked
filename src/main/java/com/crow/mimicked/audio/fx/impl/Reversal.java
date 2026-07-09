@@ -1,4 +1,4 @@
-package com.crow.mimicked.common.audio.fx;
+package com.crow.mimicked.audio.fx.impl;
 
 import java.util.Arrays;
 
@@ -18,7 +18,7 @@ public class Reversal {
         float[] reversed = Arrays.copyOf(samples, samples.length);
 
         int reversedSamples = (int) (samples.length * fxRatio);
-        int segments = (int) Math.max(reversedSamples * (1-concentration) / 24_000, 1);
+        int segments = (int) Math.max(reversedSamples * concentration / 24_000, 1);
         int segmentSize = reversedSamples / segments;
         int windowSize = samples.length / segments;
 

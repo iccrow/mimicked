@@ -1,4 +1,4 @@
-package com.crow.mimicked.common.audio.fx;
+package com.crow.mimicked.audio.fx.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
