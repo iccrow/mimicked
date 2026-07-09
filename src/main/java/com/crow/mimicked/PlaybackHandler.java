@@ -10,6 +10,7 @@ import de.maxhenkel.voicechat.api.audiochannel.ClientEntityAudioChannel;
 import de.maxhenkel.voicechat.api.audiochannel.EntityAudioChannel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -50,8 +51,11 @@ public class PlaybackHandler {
             return;
 
         Entity theChosenOne = chooseHostEntity(event.player, Plugin.capi.getVoiceChatDistance()/2.0);
-        if (theChosenOne == null)
+        if (theChosenOne == null) {
+            if (Config.DEBUG.get())
+                LOGGER.info("No host entity found");
             return;
+        }
 
         for (int i = 0; i < 5; i++) {
             UUID mimicked = AudioFileManager.getRandomPlayer();
@@ -148,12 +152,18 @@ public class PlaybackHandler {
 
         Random rand = new Random();
 
+        List<Entity> candidates;
+        if (Config.HOST_WHITELIST.get().isEmpty())
+            candidates = entities.stream().filter(e -> (e instanceof Monster monster) && !monster.isNoAi()).toList();
+        else
+            candidates = entities.stream().filter(e -> Config.HOST_WHITELIST.get().contains(EntityType.getKey(e.getType()).toString())).toList();
 
-        List<Entity> hostiles = entities.stream().filter(e -> (e instanceof Monster monster) && !monster.isNoAi()).toList();
+        if (candidates.isEmpty())
+            if (Config.HOST_WHITELIST.get().isEmpty())
+                return entities.get(rand.nextInt(entities.size()));
+            else
+                return null;
 
-        if (hostiles.isEmpty())
-            return entities.get(rand.nextInt(entities.size()));
-
-        return hostiles.get(rand.nextInt(hostiles.size()));
+        return candidates.get(rand.nextInt(candidates.size()));
     }
 }
