@@ -1,19 +1,14 @@
 package com.crow.mimicked;
 
-import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
-import de.maxhenkel.voicechat.api.VoicechatApi;
-import de.maxhenkel.voicechat.api.VoicechatClientApi;
-import de.maxhenkel.voicechat.api.VoicechatPlugin;
-import de.maxhenkel.voicechat.api.events.ClientReceiveSoundEvent;
-import de.maxhenkel.voicechat.api.events.ClientSoundEvent;
-import de.maxhenkel.voicechat.api.events.ClientVoicechatInitializationEvent;
-import de.maxhenkel.voicechat.api.events.EventRegistration;
+import de.maxhenkel.voicechat.api.*;
+import de.maxhenkel.voicechat.api.events.*;
 
 @ForgeVoicechatPlugin
 public class Plugin implements VoicechatPlugin {
 
     public static VoicechatApi api;
     public static VoicechatClientApi capi;
+    public static VoicechatServerApi sapi;
 
     @Override
     public void initialize(VoicechatApi api) {
@@ -27,8 +22,11 @@ public class Plugin implements VoicechatPlugin {
 
     @Override
     public void registerEvents(EventRegistration registration) {
-        registration.registerEvent(ClientReceiveSoundEvent.EntitySound.class, PacketHandler::receivePacket);
-        registration.registerEvent(ClientSoundEvent.class, PacketHandler::receivePacket);
+        registration.registerEvent(ClientReceiveSoundEvent.EntitySound.class, AudioPacketHandler::receivePacket);
+        registration.registerEvent(ClientSoundEvent.class, AudioPacketHandler::receivePacket);
         registration.registerEvent(ClientVoicechatInitializationEvent.class, event -> capi = event.getVoicechat());
+
+        registration.registerEvent(VoicechatServerStartedEvent.class, event -> sapi = event.getVoicechat());
+        registration.registerEvent(MicrophonePacketEvent.class, AudioPacketHandler::receivePacket);
     }
 }

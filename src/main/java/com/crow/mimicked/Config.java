@@ -1,27 +1,17 @@
 package com.crow.mimicked;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
 // Demonstrates how to use Forge's config APIs
 @Mod.EventBusSubscriber(modid = Mimicked.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config
 {
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder().comment("General settings for the Mimicked mod.");
 
-    public static final ForgeConfigSpec.LongValue TIMEOUT = BUILDER
-            .comment("How long of no audio input before assuming the speaker is done talking.")
+    public static final ForgeConfigSpec.LongValue TIMEOUT = BUILDER.push("thresholds")
+            .comment("How many milliseconds of no audio input before assuming the speaker is done talking.")
             .defineInRange("timeout", 400L, 1L, Long.MAX_VALUE);
 
     public static final ForgeConfigSpec.IntValue AMPLITUDE_THRESHOLD = BUILDER
@@ -36,30 +26,42 @@ public class Config
             .comment("RMS threshold to consider the clip as non-silent.")
             .defineInRange("rmsThreshold", 500, 0.0, Double.MAX_VALUE);
 
+    public static final ForgeConfigSpec.DoubleValue RECORDING_CHANCE = BUILDER.pop().push("recording")
+            .comment("The chance to record a player when they are speaking.")
+            .defineInRange("recordingChance", 0.2, 0.0, 1.0);
+
     public static final ForgeConfigSpec.DoubleValue REPLACEMENT_CHANCE = BUILDER
-            .comment("The chance of a clip being replaced by a new one if clip storage is full.")
+            .comment("The chance of a clip being replaced by a new one when a new recording is made if clip storage is full.")
             .defineInRange("replacementChance", 0.2, 0.0, 1.0);
 
-    public static final ForgeConfigSpec.DoubleValue RANDOMNESS = BUILDER
-            .comment("The portion of the time to NOT record players' speaking.")
-            .defineInRange("randomness", 0.8, 0.0, 1.0);
-
-    public static final ForgeConfigSpec.IntValue ODDS = BUILDER
-            .comment("Odds for randomly mimicking. One in N.")
-            .defineInRange("odds", 20 * 60 * 5, 1, Integer.MAX_VALUE);
-
-    public static final ForgeConfigSpec.BooleanValue DISABLE_SELF = BUILDER
-            .comment("Disables hearing yourself.")
-            .define("disableSelf", false);
-
-    public static final ForgeConfigSpec.IntValue MAX_CLIP_LENGTH = BUILDER
-            .comment("Maximum size of a mimic clip.")
-            .defineInRange("maxClipLength", 10, 1, 100);
+    public static final ForgeConfigSpec.DoubleValue MAX_CLIP_LENGTH = BUILDER
+            .comment("Maximum size of a mimic clip in seconds.")
+            .defineInRange("maxClipLength", 10.0, 1.0, 100.0);
 
     public static final ForgeConfigSpec.IntValue MAX_CLIP_STORAGE = BUILDER
             .comment("Maximum number of stored clips for each player.")
             .defineInRange("maxClipStorage", 15, 1, 100);
 
+    public static final ForgeConfigSpec.DoubleValue SPARSITY = BUILDER.pop().push("playback")
+            .comment("How often should mimic events happen (on average) in minutes.")
+            .defineInRange("sparsity", 5, 0, Double.MAX_VALUE);
 
-    static final ForgeConfigSpec SPEC = BUILDER.build();
+    public static final ForgeConfigSpec.DoubleValue DELETION_CHANCE = BUILDER
+            .comment("The chance of a clip being deleted after it is used.")
+            .defineInRange("deletionChance", 0.5, 0.0, 1.0);
+
+    public static final ForgeConfigSpec.BooleanValue DISABLE_SELF = BUILDER
+            .comment("Disables hearing yourself.")
+            .define("disableSelf", false);
+
+    public static final ForgeConfigSpec.BooleanValue PREFER_SERVER_SIDE = BUILDER
+            .comment("Disable client-side audio processing when connected to a server with the mod installed (recommended for quality).")
+            .define("preferServerSide", true);
+
+    public static final ForgeConfigSpec.BooleanValue DEBUG = BUILDER.pop().push("debug")
+            .comment("Enables debug logging.")
+            .define("debug", false);
+
+
+    static final ForgeConfigSpec SPEC = BUILDER.pop().build();
 }
