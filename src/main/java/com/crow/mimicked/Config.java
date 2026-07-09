@@ -1,7 +1,12 @@
 package com.crow.mimicked;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
 // Demonstrates how to use Forge's config APIs
@@ -58,10 +63,18 @@ public class Config
             .comment("Disable client-side audio processing when connected to a server with the mod installed (recommended for quality).")
             .define("preferServerSide", true);
 
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> HOST_WHITELIST = BUILDER
+            .comment("A whitelist for possible entities to be the source of the mimicking. Note that mimicking can only be done if there is a proper host nearby.")
+            .defineList("hostWhitelist", List.of(), Config::validateEntityName);
+
     public static final ForgeConfigSpec.BooleanValue DEBUG = BUILDER.pop().push("debug")
             .comment("Enables debug logging.")
             .define("debug", false);
 
 
     static final ForgeConfigSpec SPEC = BUILDER.pop().build();
+
+    private static boolean validateEntityName(final Object obj) {
+        return obj instanceof final String name && ForgeRegistries.ENTITY_TYPES.containsKey(ResourceLocation.parse(name));
+    }
 }
