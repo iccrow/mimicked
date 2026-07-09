@@ -50,7 +50,7 @@ public class PlaybackHandler {
         if (!AudioFileManager.hasClips())
             return;
 
-        Entity theChosenOne = chooseHostEntity(event.player, Plugin.capi.getVoiceChatDistance()/2.0);
+        Entity theChosenOne = chooseHostEntity(event.player, Plugin.api.getVoiceChatDistance()/2.0);
         if (theChosenOne == null) {
             if (Config.DEBUG.get())
                 LOGGER.info("No host entity found");
@@ -105,7 +105,7 @@ public class PlaybackHandler {
 
                 channel.play(samples);
             } else {
-                EntityAudioChannel channel = Plugin.sapi.createEntityAudioChannel(theChosenOne.getUUID(), Plugin.capi.fromEntity(theChosenOne));
+                EntityAudioChannel channel = Plugin.sapi.createEntityAudioChannel(theChosenOne.getUUID(), Plugin.sapi.fromEntity(theChosenOne));
                 if (channel == null)
                     return;
 
