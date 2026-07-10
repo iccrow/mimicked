@@ -44,16 +44,26 @@ public class PlaybackHandler {
         if (event.side.isClient() && event.player != Minecraft.getInstance().player)
             return;
 
-        if (Math.random() > 1.0 / (20 * 60 * Config.SPARSITY.get()))
+        boolean overdrive = checkForOverdrive(event.player, Plugin.api.getVoiceChatDistance() / 2.0);
+        double sparsity = overdrive ? Config.OVERDRIVE_SPARSITY.get() : Config.SPARSITY.get();
+
+        if (Math.random() > 1.0 / (20 * 60 * sparsity))
             return;
 
         if (!AudioFileManager.hasClips())
             return;
 
-        Entity theChosenOne = chooseHostEntity(event.player, Plugin.api.getVoiceChatDistance()/2.0);
+        Entity theChosenOne = chooseHostEntity(event.player, Plugin.api.getVoiceChatDistance() / 2.0, overdrive);
         if (theChosenOne == null) {
             if (Config.DEBUG.get())
                 LOGGER.info("No host entity found");
+            return;
+        }
+
+        if (speaking.getOrDefault(theChosenOne.getUUID(), false)) {
+            if (Config.DEBUG.get())
+                LOGGER.info("Skipping mimic event because the chosen host is already speaking");
+
             return;
         }
 
@@ -71,7 +81,9 @@ public class PlaybackHandler {
             if (samples.length < 100)
                 return;
 
-            if (Math.random() < SFXConfig.SFX_CHANCE.get()) {
+            double sfxChance = overdrive ? SFXConfig.SFX_OVERDRIVE_CHANCE.get() : SFXConfig.SFX_CHANCE.get();
+            double sfxOverlapChange = overdrive ? SFXConfig.SFX_OVERDRIVE_OVERLAP_CHANCE.get() : SFXConfig.SFX_OVERLAP_CHANCE.get();
+            if (Math.random() < sfxChance) {
                 float[] floats = AudioConverter.toFloat(samples);
                 SFX sfx = SFX.random();
                 if (sfx != null) {
@@ -80,7 +92,7 @@ public class PlaybackHandler {
 
                     floats = sfx.apply(floats);
 
-                    if (Math.random() < SFXConfig.SFX_OVERLAP_CHANCE.get()) {
+                    if (Math.random() < sfxOverlapChange) {
                         SFX sfx2 = SFX.random();
                         if (sfx2 != null) {
                             if (Config.DEBUG.get())
@@ -110,25 +122,20 @@ public class PlaybackHandler {
                     return;
 
                 AudioPlayer player = Plugin.sapi.createAudioPlayer(channel, Plugin.sapi.createEncoder(), samples);
-                if (!speaking.getOrDefault(mimicked, false)) {
 
-                    if (Config.DEBUG.get())
-                        LOGGER.info("Playing audio to server");
+                if (Config.DEBUG.get())
+                    LOGGER.info("Playing audio to server");
 
-                    speaking.put(mimicked, true);
-                    player.startPlaying();
+                speaking.put(theChosenOne.getUUID(), true);
+                player.startPlaying();
 
-                    player.setOnStopped(() -> {
-                        speaking.put(mimicked, false);
-                    });
-                } else {
-                    if (Config.DEBUG.get())
-                        LOGGER.info("Skipping audio to server because another mimic clip of the same player is currently playing");
-                }
+                player.setOnStopped(() -> {
+                    speaking.put(theChosenOne.getUUID(), false);
+                });
 
             }
 
-            if (Math.random() < Config.DELETION_CHANCE.get()) {
+            if (!overdrive && Math.random() < Config.DELETION_CHANCE.get()) {
 
                 if (Config.DEBUG.get())
                     LOGGER.info("Deleting audio file");
@@ -140,7 +147,35 @@ public class PlaybackHandler {
         }
     }
 
-    public static Entity chooseHostEntity(Player player, double radius) {
+    private static boolean checkForOverdrive(Player player, double radius) {
+        AABB box = new AABB(
+                player.getX() - radius, player.getY() - radius, player.getZ() - radius,
+                player.getX() + radius, player.getY() + radius, player.getZ() + radius
+        );
+
+        List<Entity> entities = player.level().getEntities(player, box, e -> !(e instanceof Player) && e instanceof LivingEntity);
+
+        if (entities.isEmpty()) return false;
+
+        List<Entity> candidates;
+        if (Config.OVERDRIVE_HOSTS.get().isEmpty())
+            return false;
+        else
+            candidates = entities.stream().filter(e -> {
+                for (String s : Config.OVERDRIVE_HOSTS.get()) {
+                    if (
+                            EntityType.getKey(e.getType()).toString().equals(s) || (
+                                    s.startsWith("@") && EntityType.getKey(e.getType()).getNamespace().equals(s.substring(1))
+                            )
+                    ) return true;
+                }
+                return false;
+            }).toList();
+
+        return !candidates.isEmpty();
+    }
+
+    private static Entity chooseHostEntity(Player player, double radius, boolean overdrive) {
         AABB box = new AABB(
                 player.getX() - radius, player.getY() - radius, player.getZ() - radius,
                 player.getX() + radius, player.getY() + radius, player.getZ() + radius
@@ -153,13 +188,23 @@ public class PlaybackHandler {
         Random rand = new Random();
 
         List<Entity> candidates;
-        if (Config.HOST_WHITELIST.get().isEmpty())
+        List<? extends String> whitelist = overdrive ? Config.OVERDRIVE_HOSTS.get() : Config.HOST_WHITELIST.get();
+        if (whitelist.isEmpty())
             candidates = entities.stream().filter(e -> (e instanceof Monster monster) && !monster.isNoAi()).toList();
         else
-            candidates = entities.stream().filter(e -> Config.HOST_WHITELIST.get().contains(EntityType.getKey(e.getType()).toString())).toList();
+            candidates = entities.stream().filter(e -> {
+                for (String s : whitelist) {
+                    if (
+                            EntityType.getKey(e.getType()).toString().equals(s) || (
+                                    s.startsWith("@") && EntityType.getKey(e.getType()).getNamespace().equals(s.substring(1))
+                            )
+                    ) return true;
+                }
+                return false;
+            }).toList();
 
         if (candidates.isEmpty())
-            if (Config.HOST_WHITELIST.get().isEmpty())
+            if (whitelist.isEmpty())
                 return entities.get(rand.nextInt(entities.size()));
             else
                 return null;

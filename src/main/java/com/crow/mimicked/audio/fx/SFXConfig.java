@@ -15,7 +15,15 @@ public class SFXConfig {
             .comment("The chance of a second sound effect to be applied to mimic clips.")
             .defineInRange("sfxOverlapChance", 0.3, 0.0, 1.0);
 
-    public static final FullReversalSFX.Config FULL_REVERSAL_SFX = new FullReversalSFX.Config(BUILDER.pop());
+    public static final ForgeConfigSpec.DoubleValue SFX_OVERDRIVE_CHANCE = BUILDER.push("overdrive")
+            .comment("The chance of a second sound effect to be applied to mimic clips when near an overdrive host.")
+            .defineInRange("sfxOverdriveChance", 0.9, 0.0, 1.0);
+
+    public static final ForgeConfigSpec.DoubleValue SFX_OVERDRIVE_OVERLAP_CHANCE = BUILDER
+            .comment("The chance of a second sound effect to be applied to mimic clips when near an overdrive host.")
+            .defineInRange("sfxOverdriveOverlapChance", 0.6, 0.0, 1.0);
+
+    public static final FullReversalSFX.Config FULL_REVERSAL_SFX = new FullReversalSFX.Config(BUILDER.pop().pop());
     public static final FracturedReversalSFX.Config FRACTURED_REVERSAL_SFX = new FracturedReversalSFX.Config(BUILDER);
     public static final HalfWaveRectifierSFX.Config HALF_WAVE_RECTIFIER_SFX = new HalfWaveRectifierSFX.Config(BUILDER);
     public static final PitchedFullWaveRectifierSFX.Config PITCHED_FULL_WAVE_RECTIFIER_SFX = new PitchedFullWaveRectifierSFX.Config(BUILDER);
