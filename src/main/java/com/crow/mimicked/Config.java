@@ -45,7 +45,7 @@ public class Config
 
     public static final ForgeConfigSpec.IntValue MAX_CLIP_STORAGE = BUILDER
             .comment("Maximum number of stored clips for each player.")
-            .defineInRange("maxClipStorage", 15, 1, 100);
+            .defineInRange("maxClipStorage", 15, 1, Integer.MAX_VALUE);
 
     public static final ForgeConfigSpec.DoubleValue SPARSITY = BUILDER.pop().push("playback")
             .comment("How often should mimic events happen (on average) in minutes.")
