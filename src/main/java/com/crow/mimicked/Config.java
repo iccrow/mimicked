@@ -56,7 +56,7 @@ public class Config
             .defineInRange("deletionChance", 0.5, 0.0, 1.0);
 
     public static final ForgeConfigSpec.BooleanValue DISABLE_SELF = BUILDER
-            .comment("Disables hearing yourself.")
+            .comment("Disables hearing yourself. For server-side mimicking, this only reduces the chance of you hearing yourself.")
             .define("disableSelf", false);
 
     public static final ForgeConfigSpec.BooleanValue PREFER_SERVER_SIDE = BUILDER
