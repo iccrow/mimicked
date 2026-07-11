@@ -8,8 +8,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Forge's config APIs
 @Mod.EventBusSubscriber(modid = Mimicked.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config
 {
@@ -56,7 +54,7 @@ public class Config
             .defineInRange("deletionChance", 0.5, 0.0, 1.0);
 
     public static final ForgeConfigSpec.BooleanValue DISABLE_SELF = BUILDER
-            .comment("Disables hearing yourself. For server-side mimicking, this only reduces the chance of you hearing yourself.")
+            .comment("Disables hearing yourself.")
             .define("disableSelf", false);
 
     public static final ForgeConfigSpec.BooleanValue PREFER_SERVER_SIDE = BUILDER

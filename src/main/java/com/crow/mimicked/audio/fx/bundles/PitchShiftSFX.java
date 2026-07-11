@@ -23,7 +23,7 @@ public class PitchShiftSFX implements SFX {
 
     @Override
     public float[] apply(float[] samples) {
-        return Shifter.pitch(samples, shift);
+        return Shifter.pitch(samples, this.shift);
     }
 
     public static class Config {
@@ -44,9 +44,9 @@ public class PitchShiftSFX implements SFX {
             builder.comment("The pitch shift amount.")
                     .push("shift");
             this.SHIFT_MIN = builder
-                    .defineInRange("min", -0.3, -1, 3.0);
+                    .defineInRange("min", -0.3, -1, Double.MAX_VALUE);
             this.SHIFT_MAX = builder
-                    .defineInRange("max", 0.3, -1, 3.0);
+                    .defineInRange("max", 0.3, -1, Double.MAX_VALUE);
             builder.pop();
 
             builder.pop();

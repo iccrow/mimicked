@@ -23,7 +23,7 @@ public class TempoShiftSFX implements SFX {
 
     @Override
     public float[] apply(float[] samples) {
-        return Shifter.tempo(samples, shift);
+        return Shifter.tempo(samples, this.shift);
     }
 
     public static class Config {
@@ -44,9 +44,9 @@ public class TempoShiftSFX implements SFX {
             builder.comment("The tempo shift amount.")
                     .push("shift");
             this.SHIFT_MIN = builder
-                    .defineInRange("min", -0.3, -1, 3.0);
+                    .defineInRange("min", -0.3, -1.0, Double.MAX_VALUE);
             this.SHIFT_MAX = builder
-                    .defineInRange("max", 0.3, -1.0, 3.0);
+                    .defineInRange("max", 0.3, -1.0, Double.MAX_VALUE);
             builder.pop();
 
             builder.pop();

@@ -28,5 +28,7 @@ public class Plugin implements VoicechatPlugin {
 
         registration.registerEvent(VoicechatServerStartedEvent.class, event -> sapi = event.getVoicechat());
         registration.registerEvent(MicrophonePacketEvent.class, AudioPacketHandler::receivePacket);
+
+        registration.registerEvent(EntitySoundPacketEvent.class, AudioPacketHandler::sendPacket);
     }
 }
