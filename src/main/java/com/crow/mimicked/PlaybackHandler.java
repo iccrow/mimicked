@@ -83,35 +83,31 @@ public class PlaybackHandler {
 
             double sfxChance = overdrive ? SFXConfig.SFX_OVERDRIVE_CHANCE.get() : SFXConfig.SFX_CHANCE.get();
             double sfxOverlapChange = overdrive ? SFXConfig.SFX_OVERDRIVE_OVERLAP_CHANCE.get() : SFXConfig.SFX_OVERLAP_CHANCE.get();
-            if (Math.random() < sfxChance) {
+            int maxOverlaps = overdrive ? SFXConfig.SFX_OVERDRIVE_MAX_OVERLAP.get() : SFXConfig.SFX_MAX_OVERLAP.get();
+            float[] floats = AudioConverter.toFloat(samples);
+            boolean appliedSFX = false;
+            for (int j = 0; j < maxOverlaps; j++) {
+                if (j == 0 && Math.random() > sfxChance || j > 0 && Math.random() > sfxOverlapChange)
+                    break;
                 try {
-                    float[] floats = AudioConverter.toFloat(samples);
                     SFX sfx = SFX.random();
-                    if (sfx != null) {
-                        if (Config.DEBUG.get())
-                            LOGGER.info("Applying SFX: {}", sfx.getId());
+                    if (sfx == null)
+                        break;
 
-                        floats = sfx.apply(floats);
+                    if (Config.DEBUG.get())
+                        LOGGER.info("Applying SFX #{}: {}", j + 1, sfx.getId());
 
-                        if (Math.random() < sfxOverlapChange) {
-                            SFX sfx2 = SFX.random();
-                            if (sfx2 != null) {
-                                if (Config.DEBUG.get())
-                                    LOGGER.info("Applying Overlapping SFX: {}", sfx2.getId());
-
-                                floats = sfx2.apply(floats);
-                                samples = AudioConverter.toShort(floats);
-                            }
-                        } else {
-                            samples = AudioConverter.toShort(floats);
-                        }
-                    }
+                    floats = sfx.apply(floats);
+                    appliedSFX = true;
                 } catch (Exception | Error e) {
                     if (Config.DEBUG.get()) {
-                        LOGGER.info("Failed to apply SFX, skipping: {}", e.getMessage());
+                        LOGGER.info("Failed to apply SFX: {}", e.getMessage());
                     }
                 }
             }
+
+            if (appliedSFX)
+                samples = AudioConverter.toShort(floats);
 
             if (event.side.isClient()) {
                 ClientEntityAudioChannel channel = Plugin.capi.createEntityAudioChannel(theChosenOne.getUUID(), Plugin.capi.fromEntity(theChosenOne));
