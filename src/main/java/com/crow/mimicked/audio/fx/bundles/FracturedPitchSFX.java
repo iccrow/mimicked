@@ -10,7 +10,8 @@ public class FracturedPitchSFX implements SFX {
 
     private final double fxRatio;
     private final double concentration;
-    private final double variance;
+    private final double minVariance;
+    private final double maxVariance;
 
     public FracturedPitchSFX() {
         this.fxRatio = Math.random() * (
@@ -19,9 +20,8 @@ public class FracturedPitchSFX implements SFX {
         this.concentration = Math.random() * (
                 SFXConfig.FRACTURED_PITCH_SFX.CONCENTRATION_MAX.get() - SFXConfig.FRACTURED_PITCH_SFX.CONCENTRATION_MIN.get()
         ) + SFXConfig.FRACTURED_PITCH_SFX.CONCENTRATION_MIN.get();
-        this.variance = Math.random() * (
-                SFXConfig.FRACTURED_PITCH_SFX.VARIANCE_MAX.get() - SFXConfig.FRACTURED_PITCH_SFX.VARIANCE_MIN.get()
-        ) + SFXConfig.FRACTURED_PITCH_SFX.VARIANCE_MIN.get();
+        this.minVariance = SFXConfig.FRACTURED_PITCH_SFX.VARIANCE_MIN.get();
+        this.maxVariance = SFXConfig.FRACTURED_PITCH_SFX.VARIANCE_MAX.get();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class FracturedPitchSFX implements SFX {
 
     @Override
     public float[] apply(float[] samples) {
-        return Shifter.fracturedPitch(samples, this.fxRatio, this.concentration, this.variance);
+        return Shifter.fracturedPitch(samples, this.fxRatio, this.concentration, this.minVariance, this.maxVariance);
     }
 
     public static class Config {
