@@ -18,7 +18,7 @@ public class Reversal {
         float[] reversed = Arrays.copyOf(samples, samples.length);
 
         int reversedSamples = (int) (samples.length * fxRatio);
-        int segments = (int) Math.max(reversedSamples * concentration / 24_000, 1);
+        int segments = (int) Math.max(Math.round(reversedSamples * concentration / 24_000), 1);
         int segmentSize = reversedSamples / segments;
         int windowSize = samples.length / segments;
 

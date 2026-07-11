@@ -67,10 +67,10 @@ public class FracturedTempoSFX implements SFX {
             builder.comment("The conversion rate of number of chunks processed per half-second of tempo-shifted audio.")
                     .push("concentration");
             this.CONCENTRATION_MIN = builder
-                    .defineInRange("min", 0.1, 0.0, 24_000.0);
+                    .defineInRange("min", 0.5, 0.0, 24_000.0);
 
             this.CONCENTRATION_MAX = builder
-                    .defineInRange("max", 0.3, 0.0, 24_000.0);
+                    .defineInRange("max", 0.7, 0.0, 24_000.0);
             builder.pop();
 
             builder.comment("The maximum variance of tempo the fractured audio sfx.")
