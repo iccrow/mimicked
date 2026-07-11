@@ -37,7 +37,7 @@ public class Shifter {
         return shifted;
     }
 
-    public static float[] fracturedTempo(float[] samples, double fxRatio, double concentration, double variance) {
+    public static float[] fracturedTempo(float[] samples, double fxRatio, double concentration, double minVariance, double maxVariance) {
         Float[] wrapped = new Float[samples.length];
         for (int i = 0; i < samples.length; i++) {
             wrapped[i] = samples[i];
@@ -59,7 +59,8 @@ public class Shifter {
 
         for (int segmentIndex : segmentIndices) {
             float[] segment = Arrays.copyOfRange(samples, segmentIndex, segmentIndex + segmentSize);
-            double shift = (Math.random() - 0.5) * 2 * variance;
+            double shift = (Math.random() - 0.5) * 2 * (maxVariance - minVariance);
+            shift += Math.signum(shift) * minVariance;
             if (shift < 0)
                 shift = -1 / (-1 + shift) - 1;
             float[] shifted = tempo(segment, shift);
@@ -80,7 +81,7 @@ public class Shifter {
         return out;
     }
 
-    public static float[] fracturedPitch(float[] samples, double fxRatio, double concentration, double variance) {
+    public static float[] fracturedPitch(float[] samples, double fxRatio, double concentration, double minVariance, double maxVariance) {
         float[] fractured = Arrays.copyOf(samples, samples.length);
 
         int shiftedSamples = (int) (samples.length * fxRatio);
@@ -96,7 +97,8 @@ public class Shifter {
 
         for (int segmentIndex : segmentIndices) {
             float[] segment = Arrays.copyOfRange(samples, segmentIndex, segmentIndex + segmentSize);
-            double shift = (Math.random() - 0.5) * 2 * variance;
+            double shift = (Math.random() - 0.5) * 2 * (maxVariance - minVariance);
+            shift += Math.signum(shift) * minVariance;
             if (shift < 0)
                 shift = -1 / (-1 + shift) - 1;
             float[] shifted = pitch(segment, shift);
