@@ -15,8 +15,8 @@ public class Stutter {
                 List.of(wrapped)
         );
 
-        int segments = (int) (samples.length / 48000.0 / (stutterCooldown + stutterDuration * repeats)) + 1;
-        int stutterSamples = (int) (stutterDuration * segments * 48000);
+        int segments = (int) (samples.length / 48_000.0 / (stutterCooldown + stutterDuration * repeats)) + 1;
+        int stutterSamples = (int) (stutterDuration * segments * 48_000);
         int segmentSize = stutterSamples / segments;
         int windowSize = samples.length / segments;
 

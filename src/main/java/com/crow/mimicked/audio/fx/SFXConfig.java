@@ -32,6 +32,9 @@ public class SFXConfig {
     public static final TempoShiftSFX.Config TEMPO_SHIFT_SFX = new TempoShiftSFX.Config(BUILDER);
     public static final FracturedPitchSFX.Config FRACTURED_PITCH_SFX = new FracturedPitchSFX.Config(BUILDER);
     public static final FracturedTempoSFX.Config FRACTURED_TEMPO_SFX = new FracturedTempoSFX.Config(BUILDER);
+    public static final ChunkShuffleSFX.Config CHUNK_SHUFFLE_SFX = new ChunkShuffleSFX.Config(BUILDER);
+    public static final PartialRadioInterferenceSFX.Config PARTIAL_RADIO_INTERFERENCE_SFX = new PartialRadioInterferenceSFX.Config(BUILDER);
+    public static final FracturedRadioInterferenceSFX.Config FRACTURED_RADIO_INTERFERENCE_SFX = new FracturedRadioInterferenceSFX.Config(BUILDER);
 
     public static final ForgeConfigSpec SPEC = BUILDER.build();
 

@@ -58,19 +58,19 @@ public class FracturedPitchSFX implements SFX {
             builder.comment("The ratio of pitch-shifted audio to pitch-normal audio.")
                     .push("ratio");
             this.RATIO_MIN = builder
-                    .defineInRange("min", 0.2, 0.0, 1.0);
+                    .defineInRange("min", 0.3, 0.0, 1.0);
 
             this.RATIO_MAX = builder
-                    .defineInRange("max", 0.3, 0.0, 1.0);
+                    .defineInRange("max", 0.4, 0.0, 1.0);
             builder.pop();
 
             builder.comment("The conversion rate of number of chunks processed per half-second of pitch-shifted audio.")
                     .push("concentration");
             this.CONCENTRATION_MIN = builder
-                    .defineInRange("min", 0.1, 0.0, 24_000.0);
+                    .defineInRange("min", 0.5, 0.0, 24_000.0);
 
             this.CONCENTRATION_MAX = builder
-                    .defineInRange("max", 0.3, 0.0, 24_000.0);
+                    .defineInRange("max", 0.7, 0.0, 24_000.0);
             builder.pop();
 
             builder.comment("The maximum variance of pitch the fractured audio sfx.")

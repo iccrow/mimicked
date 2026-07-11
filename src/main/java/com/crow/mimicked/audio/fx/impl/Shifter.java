@@ -45,7 +45,7 @@ public class Shifter {
         List<Float> fractured = new ArrayList<>(List.of(wrapped));
 
         int shiftedSamples = (int) (samples.length * fxRatio);
-        int segments = (int) Math.max(shiftedSamples * concentration / 24_000, 1);
+        int segments = (int) Math.max(Math.round(shiftedSamples * concentration / 24_000), 1);
         int segmentSize = shiftedSamples / segments;
         int windowSize = samples.length / segments;
 
@@ -84,7 +84,7 @@ public class Shifter {
         float[] fractured = Arrays.copyOf(samples, samples.length);
 
         int shiftedSamples = (int) (samples.length * fxRatio);
-        int segments = (int) Math.max(shiftedSamples * concentration / 24_000, 1);
+        int segments = (int) Math.max(Math.round(shiftedSamples * concentration / 24_000), 1);
         int segmentSize = shiftedSamples / segments;
         int windowSize = samples.length / segments;
 

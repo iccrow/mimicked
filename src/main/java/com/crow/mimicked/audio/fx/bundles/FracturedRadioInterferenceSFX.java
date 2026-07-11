@@ -2,32 +2,32 @@ package com.crow.mimicked.audio.fx.bundles;
 
 import com.crow.mimicked.audio.fx.SFX;
 import com.crow.mimicked.audio.fx.SFXConfig;
-import com.crow.mimicked.audio.fx.impl.Reversal;
+import com.crow.mimicked.audio.fx.impl.Shuffle;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class FracturedReversalSFX implements SFX {
+public class FracturedRadioInterferenceSFX implements SFX {
 
     private final double fxRatio;
     private final double concentration;
 
-    public FracturedReversalSFX() {
+    public FracturedRadioInterferenceSFX() {
         this.fxRatio = Math.random() * (
-                SFXConfig.FRACTURED_REVERSAL_SFX.RATIO_MAX.get() - SFXConfig.FRACTURED_REVERSAL_SFX.RATIO_MIN.get()
-        ) + SFXConfig.FRACTURED_REVERSAL_SFX.RATIO_MIN.get();
+                SFXConfig.FRACTURED_RADIO_INTERFERENCE_SFX.RATIO_MAX.get() - SFXConfig.FRACTURED_RADIO_INTERFERENCE_SFX.RATIO_MIN.get()
+        ) + SFXConfig.FRACTURED_RADIO_INTERFERENCE_SFX.RATIO_MIN.get();
         this.concentration = Math.random() * (
-                SFXConfig.FRACTURED_REVERSAL_SFX.CONCENTRATION_MAX.get() - SFXConfig.FRACTURED_REVERSAL_SFX.CONCENTRATION_MIN.get()
-        ) + SFXConfig.FRACTURED_REVERSAL_SFX.CONCENTRATION_MIN.get();
+                SFXConfig.FRACTURED_RADIO_INTERFERENCE_SFX.CONCENTRATION_MAX.get() - SFXConfig.FRACTURED_RADIO_INTERFERENCE_SFX.CONCENTRATION_MIN.get()
+        ) + SFXConfig.FRACTURED_RADIO_INTERFERENCE_SFX.CONCENTRATION_MIN.get();
     }
 
     @Override
     public String getId() {
-        return "fractured_reversal";
+        return "fractured_radio_interference";
     }
 
     @Override
     public float[] apply(float[] samples) {
-        return Reversal.fractured(samples, this.fxRatio, this.concentration);
+        return Shuffle.bySampleWithinChunk(samples, this.fxRatio, this.concentration);
     }
 
     public static class Config {
@@ -41,14 +41,14 @@ public class FracturedReversalSFX implements SFX {
         public final ForgeConfigSpec.DoubleValue CONCENTRATION_MAX;
 
         public Config(ForgeConfigSpec.Builder builder) {
-            builder.comment("Fractured Reversal takes chunks of the input audio and reverses them.")
-                    .push("fractured_reversal");
+            builder.comment("Fractured Radio Interference takes chunks of the input audio and converts them to static. This effectively sounds like radio interference for portions of the audio.")
+                    .push("fractured_radio_interference");
 
             this.WEIGHT = builder
-                    .comment("How heavily the fractured audio reversal sfx should be weighted compared to the normal chance.")
+                    .comment("How heavily the fractured radio interference sfx should be weighted compared to the normal chance.")
                     .defineInRange("weight", 1.0, 0.0, Double.MAX_VALUE);
 
-            builder.comment("The ratio of reversed audio to unreversed audio.")
+            builder.comment("The ratio of static audio to non-static audio.")
                     .push("ratio");
             this.RATIO_MIN = builder
                     .defineInRange("min", 0.3, 0.0, 1.0);
@@ -57,7 +57,7 @@ public class FracturedReversalSFX implements SFX {
                     .defineInRange("max", 0.4, 0.0, 1.0);
             builder.pop();
 
-            builder.comment("The conversion rate of number of chunks processed per half-second of reversed audio.")
+            builder.comment("The conversion rate of number of chunks processed per half-second of shuffled audio.")
                     .push("concentration");
             this.CONCENTRATION_MIN = builder
                     .defineInRange("min", 0.5, 0.0, 24_000.0);
@@ -70,7 +70,7 @@ public class FracturedReversalSFX implements SFX {
             SFX.SFX_LIST.add(
                     Pair.of(
                             WEIGHT,
-                            FracturedReversalSFX::new
+                            FracturedRadioInterferenceSFX::new
                     )
             );
         }

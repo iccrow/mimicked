@@ -28,7 +28,7 @@ public class FullReversalSFX extends SFXConfig implements SFX {
 
             this.WEIGHT = builder
                     .comment("How heavily the full audio reversal sfx should be weighted compared to the normal chance.")
-                    .defineInRange("fullReversalWeight", 1.0, 0.0, Double.MAX_VALUE);
+                    .defineInRange("weight", 1.0, 0.0, Double.MAX_VALUE);
 
             builder.pop();
 
