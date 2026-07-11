@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentMap;
 public class PlaybackHandler {
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ConcurrentMap<UUID, Boolean> speaking = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<UUID, UUID> speaking = new ConcurrentHashMap<>();
 
     @SubscribeEvent
     public static void tick(TickEvent.PlayerTickEvent event) throws IOException, UnsupportedAudioFileException {
@@ -60,7 +60,7 @@ public class PlaybackHandler {
             return;
         }
 
-        if (speaking.getOrDefault(theChosenOne.getUUID(), false)) {
+        if (speaking.getOrDefault(theChosenOne.getUUID(), null) != null) {
             if (Config.DEBUG.get())
                 LOGGER.info("Skipping mimic event because the chosen host is already speaking");
 
@@ -84,25 +84,31 @@ public class PlaybackHandler {
             double sfxChance = overdrive ? SFXConfig.SFX_OVERDRIVE_CHANCE.get() : SFXConfig.SFX_CHANCE.get();
             double sfxOverlapChange = overdrive ? SFXConfig.SFX_OVERDRIVE_OVERLAP_CHANCE.get() : SFXConfig.SFX_OVERLAP_CHANCE.get();
             if (Math.random() < sfxChance) {
-                float[] floats = AudioConverter.toFloat(samples);
-                SFX sfx = SFX.random();
-                if (sfx != null) {
-                    if (Config.DEBUG.get())
-                        LOGGER.info("Applying SFX: {}", sfx.getId());
+                try {
+                    float[] floats = AudioConverter.toFloat(samples);
+                    SFX sfx = SFX.random();
+                    if (sfx != null) {
+                        if (Config.DEBUG.get())
+                            LOGGER.info("Applying SFX: {}", sfx.getId());
 
-                    floats = sfx.apply(floats);
+                        floats = sfx.apply(floats);
 
-                    if (Math.random() < sfxOverlapChange) {
-                        SFX sfx2 = SFX.random();
-                        if (sfx2 != null) {
-                            if (Config.DEBUG.get())
-                                LOGGER.info("Applying Overlapping SFX: {}", sfx.getId());
+                        if (Math.random() < sfxOverlapChange) {
+                            SFX sfx2 = SFX.random();
+                            if (sfx2 != null) {
+                                if (Config.DEBUG.get())
+                                    LOGGER.info("Applying Overlapping SFX: {}", sfx2.getId());
 
-                            floats = sfx2.apply(floats);
+                                floats = sfx2.apply(floats);
+                                samples = AudioConverter.toShort(floats);
+                            }
+                        } else {
                             samples = AudioConverter.toShort(floats);
                         }
-                    } else {
-                        samples = AudioConverter.toShort(floats);
+                    }
+                } catch (Exception | Error e) {
+                    if (Config.DEBUG.get()) {
+                        LOGGER.info("Failed to apply SFX, skipping: {}", e.getMessage());
                     }
                 }
             }
@@ -126,11 +132,11 @@ public class PlaybackHandler {
                 if (Config.DEBUG.get())
                     LOGGER.info("Playing audio to server");
 
-                speaking.put(theChosenOne.getUUID(), true);
+                speaking.put(theChosenOne.getUUID(), mimicked);
                 player.startPlaying();
 
                 player.setOnStopped(() -> {
-                    speaking.put(theChosenOne.getUUID(), false);
+                    speaking.remove(theChosenOne.getUUID());
                 });
 
             }
@@ -210,5 +216,9 @@ public class PlaybackHandler {
                 return null;
 
         return candidates.get(rand.nextInt(candidates.size()));
+    }
+
+    public static boolean isEntityMimickingPlayer(UUID entity, UUID player) {
+        return speaking.containsKey(entity) && speaking.get(entity).equals(player);
     }
 }

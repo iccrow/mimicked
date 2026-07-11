@@ -30,6 +30,8 @@ public class SFXConfig {
     public static final StutterSFX.Config STUTTER_SFX = new StutterSFX.Config(BUILDER);
     public static final PitchShiftSFX.Config PITCH_SHIFT_SFX = new PitchShiftSFX.Config(BUILDER);
     public static final TempoShiftSFX.Config TEMPO_SHIFT_SFX = new TempoShiftSFX.Config(BUILDER);
+    public static final FracturedPitchSFX.Config FRACTURED_PITCH_SFX = new FracturedPitchSFX.Config(BUILDER);
+    public static final FracturedTempoSFX.Config FRACTURED_TEMPO_SFX = new FracturedTempoSFX.Config(BUILDER);
 
     public static final ForgeConfigSpec SPEC = BUILDER.build();
 

@@ -60,12 +60,10 @@ public class FracturedReversalSFX implements SFX {
             builder.comment("The conversion rate of number of chunks processed per half-second of reversed audio.")
                     .push("concentration");
             this.CONCENTRATION_MIN = builder
-                    .comment("Minimum concentration of fractured audio.")
                     .defineInRange("concentrationMin", 0.1, 0.0, 2.0);
 
             this.CONCENTRATION_MAX = builder
-                    .comment("Maximum concentration of fractured audio.")
-                    .defineInRange("concentrationMax", 0.5, 0.0, 2.0);
+                    .defineInRange("concentrationMax", 0.3, 0.0, 2.0);
             builder.pop()
                     .pop();
 

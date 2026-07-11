@@ -2,7 +2,6 @@ package com.crow.mimicked;
 
 import com.crow.mimicked.audio.AudioFileManager;
 import com.crow.mimicked.audio.fx.SFXConfig;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;

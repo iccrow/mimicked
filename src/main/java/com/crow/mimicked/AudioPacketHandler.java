@@ -4,10 +4,10 @@ import com.crow.mimicked.audio.PCMStorage;
 import com.crow.mimicked.audio.AudioFileManager;
 import de.maxhenkel.voicechat.api.events.ClientReceiveSoundEvent;
 import de.maxhenkel.voicechat.api.events.ClientSoundEvent;
+import de.maxhenkel.voicechat.api.events.EntitySoundPacketEvent;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,6 +21,20 @@ import java.util.concurrent.ConcurrentMap;
 public class AudioPacketHandler {
 
     private static final ConcurrentMap<UUID, OpusDecoder> decoders = new ConcurrentHashMap<>();
+
+    public static void sendPacket(EntitySoundPacketEvent event) {
+        if (!Config.DISABLE_SELF.get())
+            return;
+
+        if (event.getReceiverConnection() == null || event.getReceiverConnection().getPlayer() == null)
+            return;
+
+        if (PlaybackHandler.isEntityMimickingPlayer(
+                event.getPacket().getEntityUuid(),
+                event.getReceiverConnection().getPlayer().getUuid()
+        ))
+            event.cancel();
+    }
 
     public static void receivePacket(MicrophonePacketEvent event) {
         if (event.getSenderConnection() == null || event.getSenderConnection().getPlayer() == null)
