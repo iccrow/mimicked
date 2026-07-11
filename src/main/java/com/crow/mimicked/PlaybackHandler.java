@@ -131,9 +131,7 @@ public class PlaybackHandler {
                 speaking.put(theChosenOne.getUUID(), mimicked);
                 player.startPlaying();
 
-                player.setOnStopped(() -> {
-                    speaking.remove(theChosenOne.getUUID());
-                });
+                player.setOnStopped(() -> speaking.remove(theChosenOne.getUUID()));
 
             }
 
