@@ -11,10 +11,10 @@ Mimicked is a horror-themed Minecraft mod that adds an unsettling atmospheric el
 
 ## Requirements
 
-- **Minecraft:** 1.20.1
-- **Minecraft Forge:** 47.4.10 (built and tested on)
+- **Minecraft:** 1.21.1
+- **Minecraft Forge:** 52.1.2 (built and tested on)
 - **Dependency:** [Simple Voice Chat](https://modrinth.com/mod/simple-voice-chat) (required at runtime)
-- **Java:** 17
+- **Java:** 21
 
 ## Configuration
 

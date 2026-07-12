@@ -4,18 +4,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.Channel;
+import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.SimpleChannel;
+
 
 public class ModNetwork {
 
-    private static final String PROTOCOL_VERSION = "1";
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            ResourceLocation.fromNamespaceAndPath(Mimicked.MODID, "main"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
+    private static final int PROTOCOL_VERSION = 1;
+    public static final SimpleChannel CHANNEL = ChannelBuilder
+            .named(ResourceLocation.fromNamespaceAndPath(Mimicked.MODID, "main"))
+            .networkProtocolVersion(PROTOCOL_VERSION)
+            .clientAcceptedVersions(Channel.VersionTest.exact(PROTOCOL_VERSION))
+            .serverAcceptedVersions(Channel.VersionTest.exact(PROTOCOL_VERSION))
+            .simpleChannel();
 
     public static void register() {}
 
