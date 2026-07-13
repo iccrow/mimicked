@@ -179,6 +179,10 @@ tasks.named('processResources', ProcessResources).configure {
 
 // Example for how to get properties into the manifest for reading at runtime.
 tasks.named('jar', Jar).configure {
+    archiveBaseName = project.name
+    archiveVersion = project.version
+    archiveClassifier = "1.21.1+forge"
+
     manifest {
         attributes([
             'Specification-Title'     : mod_id,
