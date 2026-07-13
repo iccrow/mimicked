@@ -3,7 +3,7 @@ package com.crow.mimicked.audio.fx.bundles;
 import com.crow.mimicked.audio.fx.SFX;
 import com.crow.mimicked.audio.fx.SFXConfig;
 import com.crow.mimicked.audio.fx.impl.Shifter;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class PitchShiftSFX implements SFX {
@@ -28,12 +28,12 @@ public class PitchShiftSFX implements SFX {
 
     public static class Config {
 
-        public final ForgeConfigSpec.DoubleValue WEIGHT;
+        public final ModConfigSpec.DoubleValue WEIGHT;
 
-        public final ForgeConfigSpec.DoubleValue SHIFT_MIN;
-        public final ForgeConfigSpec.DoubleValue SHIFT_MAX;
+        public final ModConfigSpec.DoubleValue SHIFT_MIN;
+        public final ModConfigSpec.DoubleValue SHIFT_MAX;
 
-        public Config(ForgeConfigSpec.Builder builder) {
+        public Config(ModConfigSpec.Builder builder) {
             builder.comment("Pitch Shift takes the entire input audio and shifts the pitch.")
                     .push("pitch_shift");
 

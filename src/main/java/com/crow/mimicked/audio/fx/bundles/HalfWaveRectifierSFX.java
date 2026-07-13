@@ -2,7 +2,7 @@ package com.crow.mimicked.audio.fx.bundles;
 
 import com.crow.mimicked.audio.fx.SFX;
 import com.crow.mimicked.audio.fx.impl.Rectifier;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class HalfWaveRectifierSFX implements SFX {
@@ -19,9 +19,9 @@ public class HalfWaveRectifierSFX implements SFX {
 
     public static class Config {
 
-        public final ForgeConfigSpec.DoubleValue WEIGHT;
+        public final ModConfigSpec.DoubleValue WEIGHT;
 
-        public Config(ForgeConfigSpec.Builder builder) {
+        public Config(ModConfigSpec.Builder builder) {
             builder.comment("Half Wave Rectifier takes the entire input audio and distorts it. This can often make audio sound like a broken speaker.")
                     .push("half_wave_rectifier");
 

@@ -15,9 +15,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.util.thread.EffectiveSide;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.slf4j.Logger;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -29,22 +30,22 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-@Mod.EventBusSubscriber(modid = Mimicked.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Mimicked.MODID)
 public class PlaybackHandler {
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final ConcurrentMap<UUID, UUID> speaking = new ConcurrentHashMap<>();
 
     @SubscribeEvent
-    public static void tick(TickEvent.PlayerTickEvent event) throws IOException, UnsupportedAudioFileException {
-        if (event.phase != TickEvent.Phase.END)
+    public static void tick(PlayerTickEvent.Post event) throws IOException, UnsupportedAudioFileException {
+        Player tickingPlayer = event.getEntity();
+
+        if (EffectiveSide.get().isClient() && ModNetwork.isServerSidePresent() && Config.PREFER_SERVER_SIDE.get())
             return;
-        if (event.side.isClient() && ModNetwork.isServerSidePresent() && Config.PREFER_SERVER_SIDE.get())
-            return;
-        if (event.side.isClient() && event.player != Minecraft.getInstance().player)
+        if (EffectiveSide.get().isClient() && event.getEntity() != Minecraft.getInstance().player)
             return;
 
-        boolean overdrive = checkForOverdrive(event.player, Plugin.api.getVoiceChatDistance() / 2.0);
+        boolean overdrive = checkForOverdrive(tickingPlayer, Plugin.api.getVoiceChatDistance() / 2.0);
         double sparsity = overdrive ? Config.OVERDRIVE_SPARSITY.get() : Config.SPARSITY.get();
 
         if (Math.random() > 1.0 / (20 * 60 * sparsity))
@@ -53,7 +54,7 @@ public class PlaybackHandler {
         if (!AudioFileManager.hasClips())
             return;
 
-        Entity theChosenOne = chooseHostEntity(event.player, Plugin.api.getVoiceChatDistance() / 2.0, overdrive);
+        Entity theChosenOne = chooseHostEntity(tickingPlayer, Plugin.api.getVoiceChatDistance() / 2.0, overdrive);
         if (theChosenOne == null) {
             if (Config.DEBUG.get())
                 LOGGER.info("No host entity found");
@@ -70,7 +71,7 @@ public class PlaybackHandler {
         for (int i = 0; i < 5; i++) {
             UUID mimicked = AudioFileManager.getRandomPlayer();
 
-            if (mimicked.equals(event.player.getUUID()) && Config.DISABLE_SELF.get())
+            if (mimicked.equals(tickingPlayer.getUUID()) && Config.DISABLE_SELF.get())
                 continue;
 
             File file = AudioFileManager.getRandomAudioFile(mimicked);
@@ -109,7 +110,7 @@ public class PlaybackHandler {
             if (appliedSFX)
                 samples = AudioConverter.toShort(floats);
 
-            if (event.side.isClient()) {
+            if (EffectiveSide.get().isClient()) {
                 ClientEntityAudioChannel channel = Plugin.capi.createEntityAudioChannel(theChosenOne.getUUID(), Plugin.capi.fromEntity(theChosenOne));
                 if (channel == null)
                     return;

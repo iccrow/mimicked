@@ -3,7 +3,7 @@ package com.crow.mimicked.audio.fx.bundles;
 import com.crow.mimicked.audio.fx.SFX;
 import com.crow.mimicked.audio.fx.SFXConfig;
 import com.crow.mimicked.audio.fx.impl.Stutter;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class StutterSFX implements SFX {
@@ -36,18 +36,18 @@ public class StutterSFX implements SFX {
 
     public static class Config {
 
-        public final ForgeConfigSpec.DoubleValue WEIGHT;
+        public final ModConfigSpec.DoubleValue WEIGHT;
 
-        public final ForgeConfigSpec.DoubleValue STUTTER_DURATION_MIN;
-        public final ForgeConfigSpec.DoubleValue STUTTER_DURATION_MAX;
+        public final ModConfigSpec.DoubleValue STUTTER_DURATION_MIN;
+        public final ModConfigSpec.DoubleValue STUTTER_DURATION_MAX;
 
-        public final ForgeConfigSpec.DoubleValue STUTTER_COOLDOWN_MIN;
-        public final ForgeConfigSpec.DoubleValue STUTTER_COOLDOWN_MAX;
+        public final ModConfigSpec.DoubleValue STUTTER_COOLDOWN_MIN;
+        public final ModConfigSpec.DoubleValue STUTTER_COOLDOWN_MAX;
 
-        public final ForgeConfigSpec.IntValue REPEATS_MIN;
-        public final ForgeConfigSpec.IntValue REPEATS_MAX;
+        public final ModConfigSpec.IntValue REPEATS_MIN;
+        public final ModConfigSpec.IntValue REPEATS_MAX;
 
-        public Config(ForgeConfigSpec.Builder builder) {
+        public Config(ModConfigSpec.Builder builder) {
             builder.comment("Stutter takes chunks of the input audio and stutters it.")
                     .push("stutter");
 

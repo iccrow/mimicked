@@ -2,9 +2,8 @@ package com.crow.mimicked.audio.fx.bundles;
 
 import com.crow.mimicked.audio.fx.SFX;
 import com.crow.mimicked.audio.fx.SFXConfig;
-import com.crow.mimicked.audio.fx.impl.Reversal;
 import com.crow.mimicked.audio.fx.impl.Shuffle;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class ChunkShuffleSFX implements SFX {
@@ -33,15 +32,15 @@ public class ChunkShuffleSFX implements SFX {
 
     public static class Config {
 
-        public final ForgeConfigSpec.DoubleValue WEIGHT;
+        public final ModConfigSpec.DoubleValue WEIGHT;
 
-        public final ForgeConfigSpec.DoubleValue RATIO_MIN;
-        public final ForgeConfigSpec.DoubleValue RATIO_MAX;
+        public final ModConfigSpec.DoubleValue RATIO_MIN;
+        public final ModConfigSpec.DoubleValue RATIO_MAX;
 
-        public final ForgeConfigSpec.DoubleValue CONCENTRATION_MIN;
-        public final ForgeConfigSpec.DoubleValue CONCENTRATION_MAX;
+        public final ModConfigSpec.DoubleValue CONCENTRATION_MIN;
+        public final ModConfigSpec.DoubleValue CONCENTRATION_MAX;
 
-        public Config(ForgeConfigSpec.Builder builder) {
+        public Config(ModConfigSpec.Builder builder) {
             builder.comment("Chunk Shuffle takes chunks of the input audio and shuffles them around.")
                     .push("chunk_shuffle");
 

@@ -3,7 +3,7 @@ package com.crow.mimicked.audio.fx.bundles;
 import com.crow.mimicked.audio.fx.SFX;
 import com.crow.mimicked.audio.fx.SFXConfig;
 import com.crow.mimicked.audio.fx.impl.Shuffle;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class PartialRadioInterferenceSFX implements SFX {
@@ -28,13 +28,13 @@ public class PartialRadioInterferenceSFX implements SFX {
 
     public static class Config {
 
-        public final ForgeConfigSpec.DoubleValue WEIGHT;
+        public final ModConfigSpec.DoubleValue WEIGHT;
 
-        public final ForgeConfigSpec.DoubleValue RATIO_MIN;
-        public final ForgeConfigSpec.DoubleValue RATIO_MAX;
+        public final ModConfigSpec.DoubleValue RATIO_MIN;
+        public final ModConfigSpec.DoubleValue RATIO_MAX;
 
 
-        public Config(ForgeConfigSpec.Builder builder) {
+        public Config(ModConfigSpec.Builder builder) {
             builder.comment("Partial Radio Interference shuffles around a portion of the audio samples. This effectively sounds like static is overlaid on top of the input audio.")
                     .push("partial_radio_interference");
 

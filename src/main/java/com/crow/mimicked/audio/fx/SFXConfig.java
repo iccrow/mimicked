@@ -1,33 +1,33 @@
 package com.crow.mimicked.audio.fx;
 
 import com.crow.mimicked.audio.fx.bundles.*;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class SFXConfig {
 
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder().comment("Settings for Mimicked mod playback sound effects.");
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder().comment("Settings for Mimicked mod playback sound effects.");
 
-    public static final ForgeConfigSpec.DoubleValue SFX_CHANCE = BUILDER.push("general")
+    public static final ModConfigSpec.DoubleValue SFX_CHANCE = BUILDER.push("general")
             .comment("The chance of sound effects to be applied to mimic clips.")
             .defineInRange("sfxChance", 0.3, 0.0, 1.0);
 
-    public static final ForgeConfigSpec.DoubleValue SFX_OVERLAP_CHANCE = BUILDER
+    public static final ModConfigSpec.DoubleValue SFX_OVERLAP_CHANCE = BUILDER
             .comment("The chance of a second sound effect to be applied to mimic clips.")
             .defineInRange("sfxOverlapChance", 0.3, 0.0, 1.0);
 
-    public static final ForgeConfigSpec.IntValue SFX_MAX_OVERLAP = BUILDER
+    public static final ModConfigSpec.IntValue SFX_MAX_OVERLAP = BUILDER
             .comment("The maximum number of overlapping sound effects that can be applied to a mimic clip.")
             .defineInRange("sfxMaxOverlap", 2, 0, Integer.MAX_VALUE);
 
-    public static final ForgeConfigSpec.DoubleValue SFX_OVERDRIVE_CHANCE = BUILDER.push("overdrive")
+    public static final ModConfigSpec.DoubleValue SFX_OVERDRIVE_CHANCE = BUILDER.push("overdrive")
             .comment("The chance of a second sound effect to be applied to mimic clips when near an overdrive host.")
             .defineInRange("sfxOverdriveChance", 0.9, 0.0, 1.0);
 
-    public static final ForgeConfigSpec.DoubleValue SFX_OVERDRIVE_OVERLAP_CHANCE = BUILDER
+    public static final ModConfigSpec.DoubleValue SFX_OVERDRIVE_OVERLAP_CHANCE = BUILDER
             .comment("The chance of a second sound effect to be applied to mimic clips when near an overdrive host.")
             .defineInRange("sfxOverdriveOverlapChance", 0.6, 0.0, 1.0);
 
-    public static final ForgeConfigSpec.IntValue SFX_OVERDRIVE_MAX_OVERLAP = BUILDER
+    public static final ModConfigSpec.IntValue SFX_OVERDRIVE_MAX_OVERLAP = BUILDER
             .comment("The maximum number of overlapping sound effects that can be applied to a mimic clip when near an overdrive host.")
             .defineInRange("sfxOverdriveMaxOverlap", 3, 0, Integer.MAX_VALUE);
 
@@ -44,6 +44,6 @@ public class SFXConfig {
     public static final PartialRadioInterferenceSFX.Config PARTIAL_RADIO_INTERFERENCE_SFX = new PartialRadioInterferenceSFX.Config(BUILDER);
     public static final FracturedRadioInterferenceSFX.Config FRACTURED_RADIO_INTERFERENCE_SFX = new FracturedRadioInterferenceSFX.Config(BUILDER);
 
-    public static final ForgeConfigSpec SPEC = BUILDER.build();
+    public static final ModConfigSpec SPEC = BUILDER.build();
 
 }

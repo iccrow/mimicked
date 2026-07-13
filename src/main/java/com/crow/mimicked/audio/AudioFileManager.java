@@ -2,7 +2,7 @@ package com.crow.mimicked.audio;
 
 import com.crow.mimicked.Config;
 import com.mojang.logging.LogUtils;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 
 import javax.sound.sampled.*;

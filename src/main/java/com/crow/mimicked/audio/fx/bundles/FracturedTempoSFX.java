@@ -3,7 +3,7 @@ package com.crow.mimicked.audio.fx.bundles;
 import com.crow.mimicked.audio.fx.SFX;
 import com.crow.mimicked.audio.fx.SFXConfig;
 import com.crow.mimicked.audio.fx.impl.Shifter;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class FracturedTempoSFX implements SFX {
@@ -36,18 +36,18 @@ public class FracturedTempoSFX implements SFX {
 
     public static class Config {
 
-        public final ForgeConfigSpec.DoubleValue WEIGHT;
+        public final ModConfigSpec.DoubleValue WEIGHT;
 
-        public final ForgeConfigSpec.DoubleValue RATIO_MIN;
-        public final ForgeConfigSpec.DoubleValue RATIO_MAX;
+        public final ModConfigSpec.DoubleValue RATIO_MIN;
+        public final ModConfigSpec.DoubleValue RATIO_MAX;
 
-        public final ForgeConfigSpec.DoubleValue CONCENTRATION_MIN;
-        public final ForgeConfigSpec.DoubleValue CONCENTRATION_MAX;
+        public final ModConfigSpec.DoubleValue CONCENTRATION_MIN;
+        public final ModConfigSpec.DoubleValue CONCENTRATION_MAX;
 
-        public final ForgeConfigSpec.DoubleValue VARIANCE_MIN;
-        public final ForgeConfigSpec.DoubleValue VARIANCE_MAX;
+        public final ModConfigSpec.DoubleValue VARIANCE_MIN;
+        public final ModConfigSpec.DoubleValue VARIANCE_MAX;
 
-        public Config(ForgeConfigSpec.Builder builder) {
+        public Config(ModConfigSpec.Builder builder) {
             builder.comment("Fractured Tempo takes chunks of the input audio and shifts their tempo.")
                     .push("fractured_tempo");
 

@@ -3,7 +3,7 @@ package com.crow.mimicked.audio.fx.bundles;
 import com.crow.mimicked.audio.fx.SFX;
 import com.crow.mimicked.audio.fx.impl.Rectifier;
 import com.crow.mimicked.audio.fx.impl.Shifter;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class PitchedFullWaveRectifierSFX implements SFX {
@@ -23,9 +23,9 @@ public class PitchedFullWaveRectifierSFX implements SFX {
 
     public static class Config {
 
-        public final ForgeConfigSpec.DoubleValue WEIGHT;
+        public final ModConfigSpec.DoubleValue WEIGHT;
 
-        public Config(ForgeConfigSpec.Builder builder) {
+        public Config(ModConfigSpec.Builder builder) {
             builder.comment("Pitched Full Wave Rectifier takes the entire input audio and distorts it, creating overlaying deep and normal pitch distorted audio.")
                     .push("pitched_full_wave_rectifier");
 

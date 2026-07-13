@@ -8,16 +8,17 @@ import de.maxhenkel.voicechat.api.events.EntitySoundPacketEvent;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-@Mod.EventBusSubscriber(modid = Mimicked.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Mimicked.MODID)
 public class AudioPacketHandler {
 
     private static final ConcurrentMap<UUID, OpusDecoder> decoders = new ConcurrentHashMap<>();
@@ -52,10 +53,7 @@ public class AudioPacketHandler {
     }
 
     @SubscribeEvent
-    public static void onTick(TickEvent.ServerTickEvent e) {
-        if (e.phase != TickEvent.Phase.END)
-            return;
-
+    public static void onTick(ServerTickEvent.Post e) {
         List<UUID> timedOut = AudioFileManager.checkTimeouts();
 
         for (UUID uuid : timedOut) {
@@ -93,10 +91,7 @@ public class AudioPacketHandler {
     }
 
     @SubscribeEvent
-    public static void onTick(TickEvent.ClientTickEvent e) {
-        if (e.phase != TickEvent.Phase.END)
-            return;
-
+    public static void onTick(ClientTickEvent.Post e) {
         AudioFileManager.checkTimeouts();
     }
 }
