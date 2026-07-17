@@ -89,19 +89,10 @@ public class Config
 
     private static boolean validateEntityName(final Object obj) {
         try {
-            try {
-                ResourceLocation.class.getDeclaredMethod("parse", String.class);
-
-                return obj instanceof final String name && (
-                        name.startsWith("@") && ModList.get().isLoaded(name.substring(1)) ||
-                                ForgeRegistries.ENTITY_TYPES.containsKey(ResourceLocation.parse(name))
-                );
-            } catch (NoSuchMethodException e) {
-                return obj instanceof final String name && (
-                        name.startsWith("@") && ModList.get().isLoaded(name.substring(1)) ||
-                                ForgeRegistries.ENTITY_TYPES.containsKey(new ResourceLocation(name))
-                );
-            }
+            return obj instanceof final String name && (
+                    name.startsWith("@") && ModList.get().isLoaded(name.substring(1)) ||
+                            ForgeRegistries.ENTITY_TYPES.containsKey(new ResourceLocation(name))
+            );
         } catch (Throwable e) {
             return false;
         }
