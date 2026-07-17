@@ -92,7 +92,7 @@ public class Config
                     name.startsWith("@") && ModList.get().isLoaded(name.substring(1)) ||
                             ForgeRegistries.ENTITY_TYPES.containsKey(ResourceLocation.parse(name))
             );
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return false;
         }
     }
