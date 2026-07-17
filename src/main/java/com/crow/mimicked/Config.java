@@ -6,6 +6,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Mimicked.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -88,11 +89,20 @@ public class Config
 
     private static boolean validateEntityName(final Object obj) {
         try {
-            return obj instanceof final String name && (
-                    name.startsWith("@") && ModList.get().isLoaded(name.substring(1)) ||
-                            ForgeRegistries.ENTITY_TYPES.containsKey(ResourceLocation.parse(name))
-            );
-        } catch (Exception e) {
+            try {
+                ResourceLocation.class.getDeclaredMethod("parse", String.class);
+
+                return obj instanceof final String name && (
+                        name.startsWith("@") && ModList.get().isLoaded(name.substring(1)) ||
+                                ForgeRegistries.ENTITY_TYPES.containsKey(ResourceLocation.parse(name))
+                );
+            } catch (NoSuchMethodException e) {
+                return obj instanceof final String name && (
+                        name.startsWith("@") && ModList.get().isLoaded(name.substring(1)) ||
+                                ForgeRegistries.ENTITY_TYPES.containsKey(new ResourceLocation(name))
+                );
+            }
+        } catch (Throwable e) {
             return false;
         }
     }
