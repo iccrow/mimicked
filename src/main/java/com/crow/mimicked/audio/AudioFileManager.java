@@ -77,7 +77,7 @@ public class AudioFileManager {
 
             if (
                     count >= Config.MAX_CLIP_STORAGE.get() &&
-                            Math.random() > Config.REPLACEMENT_CHANCE.get()
+                            Math.random() < Config.REPLACEMENT_CHANCE.get()
             ) AudioFileManager.removeRandomClip(eDir);
             else if (count >= Config.MAX_CLIP_STORAGE.get()) continue;
 
