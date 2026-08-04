@@ -13,8 +13,8 @@ public class ModNetwork {
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             new ResourceLocation(Mimicked.MODID, "main"),
             () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
+            NetworkRegistry.acceptMissingOr(PROTOCOL_VERSION),
+            NetworkRegistry.acceptMissingOr(PROTOCOL_VERSION)
     );
 
     public static void register() {}
