@@ -17,6 +17,7 @@ public class ModNetwork {
             .networkProtocolVersion(PROTOCOL_VERSION)
             .clientAcceptedVersions(Channel.VersionTest.exact(PROTOCOL_VERSION))
             .serverAcceptedVersions(Channel.VersionTest.exact(PROTOCOL_VERSION))
+            .optional()
             .simpleChannel();
 
     public static void register() {}
